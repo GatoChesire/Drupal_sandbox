@@ -4,6 +4,7 @@ namespace  Drupal\curso_module\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\curso_module\Services\Repetir;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,5 +51,21 @@ class CursoController extends ControllerBase
       $build[] = $form;
 
       return $build;
+    }
+
+    public function configCurso(){
+
+      $config = $this->config('system.site');
+
+      dpm($config, 'config');
+      dpm($config->get('name'));
+
+      /** @var ConfigFactoryInterface $configFactory */
+      $configFactory = \Drupal::service('config.factory');
+
+      $config = $configFactory->get('system.site');
+      dpm($config, 'config factory');
+
+      return ['#markup' => 'ruta de configuracion'];
     }
 }
