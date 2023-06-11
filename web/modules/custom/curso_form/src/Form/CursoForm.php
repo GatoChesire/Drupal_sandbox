@@ -54,10 +54,23 @@ class CursoForm extends FormBase {
 
     $node = $this->entityTypeManager->getStorage('node')->load(1);
 
+    $form['checked'] = [
+      '#type' => 'checkbox',
+      '#title' => 'Check',
+      '#description' => 'Si lo marcas veras el campo title',
+    ];
+
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => 'Titulo',
       '#access' => $this->currentUser()->isAuthenticated(),
+      '#states' => [
+        'visible' => [
+          ':input[name="checked"]' => [
+            'checked' => TRUE,
+          ]
+        ]
+      ]
     ];
 
     $form['label'] = [
