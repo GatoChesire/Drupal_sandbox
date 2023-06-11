@@ -15,15 +15,17 @@ class CursoController extends ControllerBase
     /** @var Repetir */
     private $repetir;
 
-    public function __construct(Repetir $repetir)
+    public function __construct(Repetir $repetir, ConfigFactoryInterface $configFactory)
     {
         $this->repetir = $repetir;
+        $this->configFactory = $configFactory;
     }
 
     public static function create(ContainerInterface $container)
     {
         return new static(
-            $container->get(id: 'curso_module.repetir')
+            $container->get(id: 'curso_module.repetir'),
+            $container->get(id: 'config.factory')
         );
     }
 
@@ -60,11 +62,12 @@ class CursoController extends ControllerBase
       dpm($config, 'config');
       dpm($config->get('name'));
 
-      /** @var ConfigFactoryInterface $configFactory */
-      $configFactory = \Drupal::service('config.factory');
+      $configEditable = $this->configFactory->getEditable('system.site');
 
-      $config = $configFactory->get('system.site');
-      dpm($config, 'config factory');
+      dpm($configEditable, 'config editable');
+
+      $configEditable->set('slogan', 'Slogan editado en codigo');
+      $configEditable->save();
 
       return ['#markup' => 'ruta de configuracion'];
     }
