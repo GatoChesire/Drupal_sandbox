@@ -2,12 +2,38 @@
 
 namespace Drupal\curso_config\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\curso_module\Services\Repetir;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CursoConfigForm extends ConfigFormBase
 {
 
+  /** @var Repetir */
+  private $repetir;
+
+    /**
+   * Constructs a \Drupal\system\ConfigFormBase object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, Repetir $repetir) {
+    parent::__construct($config_factory);
+    $this->repetir = $repetir;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('curso_module.repetir')
+    );
+  }
   protected function getEditableConfigNames()
   {
     return [
