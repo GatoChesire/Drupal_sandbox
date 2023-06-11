@@ -57,6 +57,7 @@ class CursoForm extends FormBase {
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => 'Titulo',
+      '#access' => $this->currentUser()->isAuthenticated(),
     ];
 
     $form['label'] = [
